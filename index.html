@@ -60,8 +60,69 @@
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; width: 100%; }
 
     /* UI Elements */
-    .card { background: var(--bg-card); border: 1px solid var(--border); padding: 2rem; border-radius: 4px; transition: 0.3s; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); padding: 2rem; border-radius: 4px; transition: 0.3s; position: relative; }
     .card:hover { border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    
+    /* Intro Card (Group Button) */
+    .intro-card {
+        background: rgba(0,0,0,0.6); 
+        padding: 1rem; 
+        border-radius: 10px; 
+        backdrop-filter: blur(5px); 
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .intro-card:hover {
+        background: rgba(255, 193, 7, 0.15);
+        border-color: var(--primary);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .intro-card.clickable::after {
+        content: "VIEW MEMBERS";
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+        color: var(--primary);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: 0.3s;
+    }
+    .intro-card.clickable:hover::after {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Winner Card Animation */
+    .winner-card {
+        background: #1a1a1a;
+        border: 2px solid var(--primary);
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(255, 193, 7, 0.15);
+        overflow: hidden;
+        z-index: 5;
+    }
+    .winner-card::after {
+        content: "";
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: skewX(-25deg);
+        animation: shimmer 4s infinite;
+        pointer-events: none;
+    }
+    @keyframes shimmer { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+    .star { position: absolute; background: white; border-radius: 50%; opacity: 0; box-shadow: 0 0 6px var(--primary); animation: twinkle 3s infinite; }
+    @keyframes twinkle { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0; transform: scale(0.5); } }
+
     .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; border-bottom: 1px solid var(--border); font-family: 'Space Mono', monospace; }
     .text-gold { color: var(--primary); }
     
@@ -85,9 +146,26 @@
     .nav-controls { position: absolute; bottom: 3rem; right: 3rem; display: flex; gap: 1rem; z-index: 100; }
     .nav-btn { width: 50px; height: 50px; border: 1px solid var(--text-muted); color: var(--text-main); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border-radius: 50%; background: rgba(0,0,0,0.5); }
     .nav-btn:hover { border-color: var(--primary); color: var(--primary); }
+    
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; flex-direction: column; }
     .modal img { max-height: 80vh; border: 1px solid var(--primary); }
     .close-modal { position: absolute; top: 30px; right: 50px; color: var(--primary); font-size: 3rem; cursor: pointer; }
+
+    /* Team Member List Styling */
+    .member-list li {
+        color: #fff;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+    .member-list li::before {
+        content: "•";
+        color: var(--primary);
+        position: absolute;
+        left: 0;
+        font-size: 1.5rem;
+        line-height: 1.2rem;
+    }
 
 </style>
 </head>
@@ -101,6 +179,22 @@
 
     <div id="imageModal" class="modal"><span class="close-modal">&times;</span><img id="modalImg" src=""><p id="modalCaption" style="margin-top: 1rem; color: var(--primary); font-family:'Space Mono'"></p></div>
 
+    <div id="teamModal" class="modal">
+        <span class="close-modal" onclick="closeTeamModal()">&times;</span>
+        <div style="background: var(--bg-panel); padding: 3rem; border: 2px solid var(--primary); border-radius: 15px; width: 90%; max-width: 500px; text-align: left; position: relative; box-shadow: 0 0 50px rgba(255, 193, 7, 0.3);">
+            <h2 style="color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 2rem; justify-content: center;">GROUP 6 MEMBERS</h2>
+            <ul class="member-list" style="list-style: none; font-family: 'Space Mono', monospace; font-size: 1.2rem;">
+                <li>Alok Singh</li>
+                <li>Bhavna Dogra</li>
+                <li>Ritesh Yadav</li>
+                <li>Shehnaaz Khan</li>
+                <li>Sanskar Singh</li>
+                <li>Mohhamad Anas K</li>
+            </ul>
+            <div style="text-align: center; margin-top: 2rem; font-size: 0.8rem; color: var(--text-muted);">ACCM507 Project Team</div>
+        </div>
+    </div>
+
     <div class="slider-container">
         
         <div class="slide active">
@@ -110,10 +204,20 @@
                 <div style="color: var(--primary); font-family: 'Space Mono'; letter-spacing: 3px; margin-bottom: 1rem;">ACCM507 PROJECT</div>
                 <h1>THERMO-LOCK<br><span style="color:var(--primary)">PRO</span> SERIES</h1>
                 <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem;">Financial Analysis & Target Costing Implementation</p>
+                
                 <div class="grid-3" style="border-top: 1px solid var(--border); padding-top: 2rem;">
-                    <div><small style="color:var(--text-muted)">PRESENTED BY</small><br><strong>Group 6</strong></div>
-                    <div><small style="color:var(--text-muted)">DATE</small><br><strong>Nov 2025</strong></div>
-                    <div><small style="color:var(--text-muted)">CONTEXT</small><br><strong>Cost Mgmt</strong></div>
+                    <div class="intro-card clickable" onclick="openTeamModal()">
+                        <i class="fa-solid fa-users fa-2x" style="color:var(--primary)"></i><br>
+                        <strong>Group 6</strong>
+                    </div>
+                    
+                    <div class="intro-card">
+                        <i class="fa-solid fa-calendar fa-2x" style="color:var(--primary)"></i><br>Nov 2025
+                    </div>
+                    
+                    <div class="intro-card">
+                        <i class="fa-solid fa-file-invoice-dollar fa-2x" style="color:var(--primary)"></i><br>Cost Mgmt
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,10 +299,15 @@
                     <div style="height: 150px; overflow: hidden; margin-bottom: 1rem;"><img src="./comp_contigo.jpg" style="width:100%;"></div>
                     <h3 style="color: #fff;">Contigo</h3><p style="color: var(--text-muted); font-size: 0.9rem;">Passive Insulation</p><div style="margin-top: 1rem; font-weight: bold;">₹1,500</div>
                 </div>
-                <div class="card" style="text-align: center; border-color: var(--primary); transform: scale(1.1); background: #1a1a1a;">
+                
+                <div class="card winner-card" style="text-align: center;">
+                    <div class="star" style="top:10%; left:10%; width:3px; height:3px; animation-delay:0s;"></div>
+                    <div class="star" style="top:20%; right:15%; width:4px; height:4px; animation-delay:0.5s;"></div>
+                    <div class="star" style="bottom:15%; left:20%; width:2px; height:2px; animation-delay:1s;"></div>
                     <div style="color: var(--primary); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 1rem;">OUR PRODUCT</div>
                     <h3 style="font-size: 1.5rem;">Thermo-Lock</h3><p style="color: var(--text-muted); font-size: 0.9rem;">Active Heating + Battery</p><div style="margin-top: 1rem; font-size: 1.5rem; color: var(--primary); font-weight: 800;">₹1,799</div>
                 </div>
+
                 <div class="card" style="text-align: center;">
                     <div style="height: 150px; overflow: hidden; margin-bottom: 1rem;"><img src="./comp_ember.jpg" style="width:100%;"></div>
                     <h3 style="color: #fff;">Ember</h3><p style="color: var(--text-muted); font-size: 0.9rem;">Luxury Segment</p><div style="margin-top: 1rem; font-weight: bold;">₹13,000+</div>
@@ -364,9 +473,9 @@
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     const modal = document.getElementById('imageModal');
+    const teamModal = document.getElementById('teamModal');
     const modalImg = document.getElementById('modalImg');
     const modalCaption = document.getElementById('modalCaption');
-    const closeBtn = document.querySelector('.close-modal');
     
     // Money Ticker
     const ticker = document.getElementById('moneyTicker');
@@ -380,7 +489,7 @@
             if (idx === currentSlide) {
                 slide.classList.add('active');
                 updateTicker(idx);
-                animatePercentages(slide); // Trigger percentage animation
+                animatePercentages(slide);
             }
         });
     }
@@ -397,34 +506,32 @@
         updateView();
     }
 
-    // Percentage Animation Logic
     function animatePercentages(slideElement) {
         const counters = slideElement.querySelectorAll('.counter');
         counters.forEach(counter => {
             const target = parseFloat(counter.getAttribute('data-target'));
-            const duration = 1500; // Animation speed
+            const duration = 1500; 
             const startValue = 0;
             const startTime = performance.now();
 
             function update(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3); // Ease Out Cubic
+                const ease = 1 - Math.pow(1 - progress, 3); 
                 
                 const currentVal = startValue + (target - startValue) * ease;
-                counter.innerText = currentVal.toFixed(1); // Keep 1 decimal
+                counter.innerText = currentVal.toFixed(1); 
 
                 if (progress < 1) {
                     requestAnimationFrame(update);
                 } else {
-                    counter.innerText = target; // Clean finish
+                    counter.innerText = target; 
                 }
             }
             requestAnimationFrame(update);
         });
     }
 
-    // Money Ticker Logic
     function updateTicker(slideIndex) {
         if (slideIndex < 7 || slideIndex > 12) {
             ticker.classList.remove('visible');
@@ -465,13 +572,36 @@
         modalCaption.innerText = caption;
     }
 
-    closeBtn.onclick = function() { modal.style.display = "none"; }
-    window.onclick = function(event) { if (event.target == modal) { modal.style.display = "none"; } }
+    function openTeamModal() {
+        teamModal.style.display = "flex";
+    }
+
+    function closeTeamModal() {
+        teamModal.style.display = "none";
+    }
+
+    // Generic close for any modal
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.onclick = function() { 
+            modal.style.display = "none"; 
+            teamModal.style.display = "none";
+        }
+    });
+
+    window.onclick = function(event) { 
+        if (event.target == modal || event.target == teamModal) { 
+            modal.style.display = "none"; 
+            teamModal.style.display = "none"; 
+        } 
+    }
 
     document.addEventListener('keydown', (e) => {
         if (e.key === "ArrowRight") moveSlide(1);
         if (e.key === "ArrowLeft") moveSlide(-1);
-        if (e.key === "Escape") modal.style.display = "none";
+        if (e.key === "Escape") {
+            modal.style.display = "none";
+            teamModal.style.display = "none";
+        }
     });
 
     updateView();
