@@ -28,26 +28,18 @@
         overflow: hidden;
         height: 100vh;
         width: 100vw;
-        /* Subtle Noise Texture */
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     }
 
-    /* DYNAMIC MONEY COUNTER (The "Creative" Feature) */
+    /* DYNAMIC MONEY TICKER */
     .money-ticker {
-        position: fixed;
-        top: 2rem;
-        right: 2rem;
-        background: rgba(0,0,0,0.8);
-        border: 1px solid var(--primary);
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        z-index: 1000;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+        position: fixed; top: 2rem; right: 2rem;
+        background: rgba(0,0,0,0.8); border: 1px solid var(--primary);
+        padding: 1rem 1.5rem; border-radius: 8px; z-index: 1000;
+        display: flex; flex-direction: column; align-items: flex-end;
         box-shadow: 0 0 20px var(--primary-dim);
         transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        transform: translateY(-150%); /* Hidden by default */
+        transform: translateY(-150%);
     }
     .money-ticker.visible { transform: translateY(0); }
     .ticker-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -57,66 +49,42 @@
 
     /* Slider Engine */
     .slider-container { position: relative; width: 100%; height: 100%; perspective: 1200px; }
-    .slide { 
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-        opacity: 0; visibility: hidden; 
-        transform: scale(0.95) translateY(20px); 
-        transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); 
-        display: flex; flex-direction: column; justify-content: center; 
-        padding: 3rem 5rem; z-index: 1; 
-    }
+    .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transform: scale(0.95) translateY(20px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; justify-content: center; padding: 3rem 5rem; z-index: 1; }
     .slide.active { opacity: 1; visibility: visible; transform: scale(1) translateY(0); z-index: 10; }
 
     /* Typography & Layouts */
     h1 { font-size: 4.5rem; line-height: 1; font-weight: 800; color: #fff; margin-bottom: 1rem; letter-spacing: -2px; }
     h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; text-transform: uppercase; letter-spacing: 2px; }
     h2::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(to right, var(--primary), transparent); opacity: 0.5; }
-    
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; height: 100%; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; width: 100%; }
 
     /* UI Elements */
-    .card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        padding: 2rem;
-        border-radius: 4px;
-        transition: 0.3s;
-    }
+    .card { background: var(--bg-card); border: 1px solid var(--border); padding: 2rem; border-radius: 4px; transition: 0.3s; }
     .card:hover { border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-
     .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; border-bottom: 1px solid var(--border); font-family: 'Space Mono', monospace; }
-    .stat-val { font-weight: bold; font-size: 1.2rem; color: #fff; }
     .text-gold { color: var(--primary); }
     
-    /* Images */
     .img-box { position: relative; border: 1px solid var(--border); overflow: hidden; transition: 0.3s; background: #000; }
-    .img-box img { width: 100%; height: auto; display: block; filter: grayscale(30%); transition: 0.5s; }
-    .img-box:hover img { filter: grayscale(0%); transform: scale(1.05); }
+    .img-box img { width: 100%; height: auto; display: block; transition: 0.5s; object-fit: cover; }
+    .img-box:hover img { transform: scale(1.05); }
     
-    .btn { 
-        background: transparent; border: 1px solid var(--primary); color: var(--primary); 
-        padding: 0.8rem 2rem; font-family: 'Space Mono', monospace; cursor: pointer; 
-        transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;
-    }
+    .btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.8rem 2rem; font-family: 'Space Mono', monospace; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
     .btn:hover { background: var(--primary); color: #000; }
 
-    /* Dynamic Intro Backgrounds (Mug Variety) */
+    /* Dynamic Backgrounds */
     .bg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; transition: opacity 1s; z-index: 0; }
     .bg-black { background-image: linear-gradient(to right, #121212 30%, transparent), url('./mug_black.jpg'); opacity: 1; }
     .bg-white { background-image: linear-gradient(to right, #121212 30%, transparent), url('./mug_white.jpg'); opacity: 0; }
-    
     .slide.active .bg-black { animation: fadeOut 8s infinite alternate; }
     .slide.active .bg-white { animation: fadeIn 8s infinite alternate; }
     @keyframes fadeIn { 0%, 45% { opacity: 0; } 55%, 100% { opacity: 0.6; } }
     @keyframes fadeOut { 0%, 45% { opacity: 0.6; } 55%, 100% { opacity: 0; } }
 
-    /* Navigation */
+    /* Navigation & Modal */
     .nav-controls { position: absolute; bottom: 3rem; right: 3rem; display: flex; gap: 1rem; z-index: 100; }
     .nav-btn { width: 50px; height: 50px; border: 1px solid var(--text-muted); color: var(--text-main); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border-radius: 50%; background: rgba(0,0,0,0.5); }
     .nav-btn:hover { border-color: var(--primary); color: var(--primary); }
-
-    /* Modal */
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; flex-direction: column; }
     .modal img { max-height: 80vh; border: 1px solid var(--primary); }
     .close-modal { position: absolute; top: 30px; right: 50px; color: var(--primary); font-size: 3rem; cursor: pointer; }
@@ -142,7 +110,6 @@
                 <div style="color: var(--primary); font-family: 'Space Mono'; letter-spacing: 3px; margin-bottom: 1rem;">ACCM507 PROJECT</div>
                 <h1>THERMO-LOCK<br><span style="color:var(--primary)">PRO</span> SERIES</h1>
                 <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem;">Financial Analysis & Target Costing Implementation</p>
-                
                 <div class="grid-3" style="border-top: 1px solid var(--border); padding-top: 2rem;">
                     <div><small style="color:var(--text-muted)">PRESENTED BY</small><br><strong>Group 6</strong></div>
                     <div><small style="color:var(--text-muted)">DATE</small><br><strong>Nov 2025</strong></div>
@@ -165,7 +132,9 @@
                 <div style="position: relative; height: 100%;">
                     <img src="./product_mug.jpg" style="position: absolute; right: 0; height: 80%; opacity: 0.1; mix-blend-mode: luminosity;">
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                        <div style="font-size: 6rem; font-weight: 800; color: var(--primary);">64%</div>
+                        <div style="font-size: 6rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 5px;">
+                            <span class="counter" data-target="64">0</span>%
+                        </div>
                         <div style="font-family: 'Space Mono'; letter-spacing: 2px;">COST GAP MITIGATED</div>
                     </div>
                 </div>
@@ -184,7 +153,7 @@
                     <p style="color: var(--text-muted); margin-bottom: 2rem;">Our survey of 87 professionals confirmed that temperature retention is a critical daily frustration.</p>
                     <div class="stat-row">
                         <span>User Pain Point</span>
-                        <span class="text-gold">78.2%</span>
+                        <span class="text-gold"><span class="counter" data-target="78.2">0</span>%</span>
                     </div>
                     <div class="stat-row">
                         <span>Sample Size</span>
@@ -199,19 +168,16 @@
             <div class="grid-2">
                 <div>
                     <p style="margin-bottom: 2rem;">We prioritized features based on direct user feedback ("Critical to Quality").</p>
-                    
                     <div style="margin-bottom: 1.5rem;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;"><span>Temperature Display</span> <span class="text-gold">60.9%</span></div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;"><span>Temperature Display</span> <span class="text-gold"><span class="counter" data-target="60.9">0</span>%</span></div>
                         <div style="width:100%; height:2px; background:#333;"><div style="width:60.9%; height:100%; background:var(--primary);"></div></div>
                     </div>
-                    
                     <div style="margin-bottom: 1.5rem;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;"><span>Long Battery</span> <span class="text-gold">51.7%</span></div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;"><span>Long Battery</span> <span class="text-gold"><span class="counter" data-target="51.7">0</span>%</span></div>
                         <div style="width:100%; height:2px; background:#333;"><div style="width:51.7%; height:100%; background:var(--primary);"></div></div>
                     </div>
-
                     <div style="margin-bottom: 1.5rem; opacity: 0.5;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;"><span>App Connectivity</span> <span>43.7%</span></div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;"><span>App Connectivity</span> <span><span class="counter" data-target="43.7">0</span>%</span></div>
                         <div style="width:100%; height:2px; background:#333;"><div style="width:43.7%; height:100%; background:#666;"></div></div>
                     </div>
                 </div>
@@ -227,23 +193,15 @@
             <div class="grid-3">
                 <div class="card" style="text-align: center;">
                     <div style="height: 150px; overflow: hidden; margin-bottom: 1rem;"><img src="./comp_contigo.jpg" style="width:100%;"></div>
-                    <h3 style="color: #fff;">Contigo</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Passive Insulation</p>
-                    <div style="margin-top: 1rem; font-weight: bold;">₹1,500</div>
+                    <h3 style="color: #fff;">Contigo</h3><p style="color: var(--text-muted); font-size: 0.9rem;">Passive Insulation</p><div style="margin-top: 1rem; font-weight: bold;">₹1,500</div>
                 </div>
-                
                 <div class="card" style="text-align: center; border-color: var(--primary); transform: scale(1.1); background: #1a1a1a;">
                     <div style="color: var(--primary); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 1rem;">OUR PRODUCT</div>
-                    <h3 style="font-size: 1.5rem;">Thermo-Lock</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Active Heating + Battery</p>
-                    <div style="margin-top: 1rem; font-size: 1.5rem; color: var(--primary); font-weight: 800;">₹1,799</div>
+                    <h3 style="font-size: 1.5rem;">Thermo-Lock</h3><p style="color: var(--text-muted); font-size: 0.9rem;">Active Heating + Battery</p><div style="margin-top: 1rem; font-size: 1.5rem; color: var(--primary); font-weight: 800;">₹1,799</div>
                 </div>
-
                 <div class="card" style="text-align: center;">
                     <div style="height: 150px; overflow: hidden; margin-bottom: 1rem;"><img src="./comp_ember.jpg" style="width:100%;"></div>
-                    <h3 style="color: #fff;">Ember</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Luxury Segment</p>
-                    <div style="margin-top: 1rem; font-weight: bold;">₹13,000+</div>
+                    <h3 style="color: #fff;">Ember</h3><p style="color: var(--text-muted); font-size: 0.9rem;">Luxury Segment</p><div style="margin-top: 1rem; font-weight: bold;">₹13,000+</div>
                 </div>
             </div>
         </div>
@@ -324,10 +282,11 @@
                         <div class="stat-row" style="border-color: var(--primary);"><span>SAVINGS</span> <span class="text-gold">₹100.00</span></div>
                     </div>
                 </div>
-                <div style="display: flex; align-items: center; justify-content: center;">
-                    <div style="text-align: center;">
-                        <i class="fa-solid fa-lightbulb fa-4x" style="color: var(--primary);"></i>
-                        <p style="margin-top: 1rem;">"Hidden LED Matrix"</p>
+                <div class="img-box" style="height: 400px;">
+                    <img src="./tech_internal.jpg" style="height: 100%; width: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; padding: 1rem; background: rgba(0,0,0,0.8);">
+                        <div style="color: var(--primary);">Component Swap</div>
+                        <div>Replacing OLED Module</div>
                     </div>
                 </div>
             </div>
@@ -336,10 +295,11 @@
         <div class="slide">
             <h2>Strategy 2: Life Cycle Costing</h2>
             <div class="grid-2">
-                <div style="display: flex; align-items: center; justify-content: center;">
-                    <div style="text-align: center;">
-                        <i class="fa-solid fa-rotate-left fa-4x" style="color: var(--primary);"></i>
-                        <p style="margin-top: 1rem;">Total Cost of Ownership</p>
+                <div class="img-box" style="height: 400px;">
+                    <img src="./supp_battery.jpg" style="height: 100%; width: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; padding: 1rem; background: rgba(0,0,0,0.8);">
+                        <div style="color: var(--primary);">Battery Investment</div>
+                        <div>High Quality = Low Warranty</div>
                     </div>
                 </div>
                 <div>
@@ -408,7 +368,7 @@
     const modalCaption = document.getElementById('modalCaption');
     const closeBtn = document.querySelector('.close-modal');
     
-    // Money Ticker Elements
+    // Money Ticker
     const ticker = document.getElementById('moneyTicker');
     const tickerValue = document.getElementById('tickerValue');
     const tickerLabel = document.getElementById('tickerLabel');
@@ -420,6 +380,7 @@
             if (idx === currentSlide) {
                 slide.classList.add('active');
                 updateTicker(idx);
+                animatePercentages(slide); // Trigger percentage animation
             }
         });
     }
@@ -436,11 +397,35 @@
         updateView();
     }
 
-    // THE LOGIC FOR THE MONEY COUNTER
+    // Percentage Animation Logic
+    function animatePercentages(slideElement) {
+        const counters = slideElement.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = parseFloat(counter.getAttribute('data-target'));
+            const duration = 1500; // Animation speed
+            const startValue = 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3); // Ease Out Cubic
+                
+                const currentVal = startValue + (target - startValue) * ease;
+                counter.innerText = currentVal.toFixed(1); // Keep 1 decimal
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    counter.innerText = target; // Clean finish
+                }
+            }
+            requestAnimationFrame(update);
+        });
+    }
+
+    // Money Ticker Logic
     function updateTicker(slideIndex) {
-        // Hide on Intro (0), Market Research (2,3,4,5,6,7)
-        // Show on Cost (8), VE (10), LCC (11), Conclusion (12)
-        
         if (slideIndex < 7 || slideIndex > 12) {
             ticker.classList.remove('visible');
         } else {
@@ -448,28 +433,24 @@
         }
 
         if (slideIndex === 7 || slideIndex === 8 || slideIndex === 9) {
-            // Initial Gap
             tickerLabel.innerText = "Current Gap";
             tickerValue.innerText = "-₹491.25";
-            tickerValue.style.color = "#ff4d4d"; // Red
+            tickerValue.style.color = "#ff4d4d";
             tickerBar.style.width = "100%";
             tickerBar.style.backgroundColor = "#ff4d4d";
         } else if (slideIndex === 10) {
-            // After VE
             tickerLabel.innerText = "Gap (After VE)";
             tickerValue.innerText = "-₹391.25";
-            tickerValue.style.color = "#FFC107"; // Gold/Warning
+            tickerValue.style.color = "#FFC107";
             tickerBar.style.width = "80%";
             tickerBar.style.backgroundColor = "#FFC107";
         } else if (slideIndex === 11) {
-            // After LCC
             tickerLabel.innerText = "Gap (After LCC)";
             tickerValue.innerText = "-₹175.00";
-            tickerValue.style.color = "#4CAF50"; // Greenish/Better
+            tickerValue.style.color = "#4CAF50";
             tickerBar.style.width = "35%";
             tickerBar.style.backgroundColor = "#4CAF50";
         } else if (slideIndex === 12) {
-            // Final
             tickerLabel.innerText = "Final Gap";
             tickerValue.innerText = "₹175";
             tickerValue.style.color = "#fff";
@@ -493,7 +474,6 @@
         if (e.key === "Escape") modal.style.display = "none";
     });
 
-    // Init
     updateView();
 
 </script>
